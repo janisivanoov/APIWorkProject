@@ -24,12 +24,23 @@ namespace ClubsCore.Controllers
         /// GetAll
         /// </summary>
         [HttpGet]
-        public ActionResult GetClubs([FromQuery] QueryClubParameters queryparameters)
+        public ActionResult GetClubs([FromQuery] QueryClubParameters queryParameters)
         {
             var clubsQuery = _context.Clubs
-                                     .OrderBy(c => c.Id); //ordering all clubs by Id
+                                     .OrderBy(c => c.Id)
+                                     .AsQueryable(); //ordering all clubs by Id
+            //Applying filters:
+            if (queryParameters.Name != null)
+            {
+                clubsQuery = clubsQuery.Where(n => n.Name.Contains(queryParameters.Name));
+            }
 
-            var clubs = Paginate<ClubDTO>(clubsQuery, queryparameters); //using Paginate
+            if (queryParameters.Type != null)
+            {
+                clubsQuery = clubsQuery.Where(t => t.Type == queryParameters.Type);
+            }
+
+            var clubs = Paginate<ClubDTO>(clubsQuery, queryParameters); //using Paginate
 
             return Ok(clubs);
         }

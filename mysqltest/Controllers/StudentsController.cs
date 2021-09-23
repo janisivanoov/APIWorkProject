@@ -27,9 +27,21 @@ namespace ClubsCore.Controllers
         public ActionResult GetStudents([FromQuery] QueryStudentParameters queryparameters)
         {
             var studentsQuery = _context.Students
-                                     .OrderBy(c => c.Id); //ordering all students by Id
+                                     .OrderBy(c => c.Id) //ordering all students by Id
+                                     .AsQueryable();
 
-            var students = Paginate(studentsQuery, queryparameters); //using Paginate
+            //Applying filters:
+            if (queryparameters.BirthDate != null)
+            {
+                studentsQuery = studentsQuery.Where(d => d.BirthDate == queryparameters.BirthDate);
+            }
+
+            if (queryparameters.Name != null)
+            {
+                studentsQuery = studentsQuery.Where(n => n.FirstName == queryparameters.Name);
+            }
+
+            var students = Paginate<StudentDTO>(studentsQuery, queryparameters); //using Paginate
 
             return Ok(students);
         }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
-using mysqltest.Mapping.DTO;
 using mysqltest.Models;
 using mysqltest.Paging;
 using System.Collections.Generic;
@@ -22,49 +21,19 @@ namespace mysqltest.Controllers
             _context = context;
         }
 
-        public List<ClubDTO> Paginate<TDto>(IQueryable query, QueryClubParameters QueryClubParameters)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="TDto"></typeparam>
+        /// <param name="query"></param>
+        /// <param name="paginationParameters"></param>
+        /// <returns></returns>
+        public List<TDto> Paginate<TDto>(IQueryable query, PaginationParameters paginationParameters)
         {
-            List<ClubDTO> clubs;
-
-            if (QueryClubParameters.Name == "ALL") //Check situation when we want to get all clubs using "ALL"
-            {
-                clubs = query.ProjectTo<ClubDTO>(_mapper.ConfigurationProvider)
-                            .Skip((QueryClubParameters.PageNumber - 1) * QueryClubParameters.PageSize) //Skippin adding process PageNumber and PageSize
-                            .Take(QueryClubParameters.PageSize) //Using PageSize
-                            .ToList(); //Sending to List
-            }
-            else //Situation when we enter a name like "Math"
-            {
-                clubs = query.ProjectTo<ClubDTO>(_mapper.ConfigurationProvider)
-                          .Where(c => c.Name == QueryClubParameters.Name)
-                          .Skip((QueryClubParameters.PageNumber - 1) * QueryClubParameters.PageSize) //Skippin adding process PageNumber and PageSize
-                          .Take(QueryClubParameters.PageSize) //Using PageSize
-                          .ToList(); //Sending to List
-            }
-
-            return clubs;
-        }
-
-        public List<StudentDTO> Paginate<TDTO>(IQueryable<TDTO> query, QueryStudentParameters QueryStudentParameters)
-        {
-            List<StudentDTO> students;
-
-            if (QueryStudentParameters.Name == "ALL") //Check situation when we want to get all clubs using "ALL"
-            {
-                students = query.ProjectTo<StudentDTO>(_mapper.ConfigurationProvider)
-                                .Skip((QueryStudentParameters.PageNumber - 1) * QueryStudentParameters.PageSize) //Skipping adding process PageNumber and PageSize
-                                .Take(QueryStudentParameters.PageSize) //Using PageSize
-                                .ToList(); //Sending to List
-            }
-            else //Situation when we enter a name like "Ali"
-            {
-                students = query.ProjectTo<StudentDTO>(_mapper.ConfigurationProvider)
-                             .Where(c => c.FirstName == QueryStudentParameters.Name)
-                             .Skip((QueryStudentParameters.PageNumber - 1) * QueryStudentParameters.PageSize) //Skipping adding process PageNumber and PageSize
-                             .Take(QueryStudentParameters.PageSize) //Using PageSize
-                             .ToList(); //Sending to List}
-            }
-            return students;
+            return query.ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                        .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize) //Skippin adding process PageNumber and PageSize
+                        .Take(paginationParameters.PageSize) //Using PageSize
+                        .ToList(); // Execute the query (get data)
         }
     }
 }

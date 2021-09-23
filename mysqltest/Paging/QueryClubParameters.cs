@@ -1,17 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace mysqltest.Paging
+﻿namespace mysqltest.Paging
 {
-    public class QueryClubParameters
+    public class QueryClubParameters : PaginationParameters
     {
-        private const int maxPageSize = 50;
-
-        public int PageNumber { get; set; } = 1;
-
-        [Range(1, maxPageSize)]
-        public int PageSize { get; set; }
-
         public string Name { get; set; }
+
+        public string Type { get; set; }
     }
 }
