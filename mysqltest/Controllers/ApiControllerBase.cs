@@ -26,14 +26,14 @@ namespace mysqltest.Controllers
         {
             List<ClubDTO> clubs;
 
-            if (QueryClubParameters.Name == "ALL")
+            if (QueryClubParameters.Name == "ALL") //Check situation when we want to get all clubs using "ALL"
             {
                 clubs = query.ProjectTo<ClubDTO>(_mapper.ConfigurationProvider)
                             .Skip((QueryClubParameters.PageNumber - 1) * QueryClubParameters.PageSize) //Skippin adding process PageNumber and PageSize
                             .Take(QueryClubParameters.PageSize) //Using PageSize
                             .ToList(); //Sending to List
             }
-            else
+            else //Situation when we enter a name like "Math"
             {
                 clubs = query.ProjectTo<ClubDTO>(_mapper.ConfigurationProvider)
                           .Where(c => c.Name == QueryClubParameters.Name)
@@ -49,16 +49,17 @@ namespace mysqltest.Controllers
         {
             List<StudentDTO> students;
 
-            if (QueryStudentParameters.Name == "ALL")
+            if (QueryStudentParameters.Name == "ALL") //Check situation when we want to get all clubs using "ALL"
             {
-                return query.ProjectTo<StudentDTO>(_mapper.ConfigurationProvider)
+                students = query.ProjectTo<StudentDTO>(_mapper.ConfigurationProvider)
                                 .Skip((QueryStudentParameters.PageNumber - 1) * QueryStudentParameters.PageSize) //Skipping adding process PageNumber and PageSize
                                 .Take(QueryStudentParameters.PageSize) //Using PageSize
                                 .ToList(); //Sending to List
             }
-            else
+            else //Situation when we enter a name like "Ali"
             {
-                return query.ProjectTo<StudentDTO>(_mapper.ConfigurationProvider)
+                students = query.ProjectTo<StudentDTO>(_mapper.ConfigurationProvider)
+                             .Where(c => c.FirstName == QueryStudentParameters.Name)
                              .Skip((QueryStudentParameters.PageNumber - 1) * QueryStudentParameters.PageSize) //Skipping adding process PageNumber and PageSize
                              .Take(QueryStudentParameters.PageSize) //Using PageSize
                              .ToList(); //Sending to List}

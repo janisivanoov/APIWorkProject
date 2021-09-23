@@ -24,25 +24,14 @@ namespace ClubsCore.Controllers
         /// GetAll
         /// </summary>
         [HttpGet]
-        public ActionResult GetClubs([FromQuery] QueryClubParameters queryparameters)//, string Name = "Math")
+        public ActionResult GetClubs([FromQuery] QueryClubParameters queryparameters)
         {
             var clubsQuery = _context.Clubs
                                      .OrderBy(c => c.Id); //ordering all clubs by Id
-            /*
-                        bool applyingFilter = true;
 
-                        if (true == applyingFilter) //using bool for filter
-                        {
-                            var filterForStudents = _context.Clubs
-                                                            .Where(n => n.Name == Name) //all clubs with entered name
-                                                            .ToList(); //sent to list
-                            if (filterForStudents == null)
-                                return NotFound();
-                        }
-            */
-            var students = Paginate<ClubDTO>(clubsQuery, queryparameters); //using Paginate
+            var clubs = Paginate<ClubDTO>(clubsQuery, queryparameters); //using Paginate
 
-            return Ok(students);
+            return Ok(clubs);
         }
 
         /// <summary>

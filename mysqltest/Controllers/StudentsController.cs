@@ -24,21 +24,10 @@ namespace ClubsCore.Controllers
         /// GetAll
         /// </summary>
         [HttpGet]
-        public ActionResult GetStudents([FromQuery] QueryStudentParameters queryparameters, string FirtsName = "Ali")
+        public ActionResult GetStudents([FromQuery] QueryStudentParameters queryparameters)
         {
             var studentsQuery = _context.Students
                                      .OrderBy(c => c.Id); //ordering all students by Id
-
-            bool applyingFilter = true;
-
-            if (true == applyingFilter) //using bool for filter
-            {
-                var filterForStudents = _context.Students
-                                                .Where(n => n.FirstName == FirtsName) //all Students with name "Ali"
-                                                .ToList(); //sent to list
-                if (filterForStudents == null)
-                    return NotFound();
-            }
 
             var students = Paginate(studentsQuery, queryparameters); //using Paginate
 
